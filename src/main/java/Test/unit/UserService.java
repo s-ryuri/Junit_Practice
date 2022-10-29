@@ -28,10 +28,8 @@ public class UserService {
     public List<UserResponse> loadAll(){
         List<User> users = userRepository.findAll();
 
-        List<UserResponse> collect = users.stream()
-                                          .map(m -> new UserResponse(m.getName(), m.getPassword()))
-                                          .collect(Collectors.toList());
-
-        return collect;
+        return users.stream()
+                    .map(m -> new UserResponse(m.getName(), m.getPassword()))
+                    .collect(Collectors.toList());
     }
 }

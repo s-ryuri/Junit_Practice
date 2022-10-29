@@ -1,15 +1,16 @@
 package Test.unit;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -56,8 +57,28 @@ class UserServiceTest {
         verify(passwordEncoder,times(1)).encode(any(String.class));
     }
 
+    @Test
+    @DisplayName("사용자 목록 조회")
+    void loadAllUser(){
+        //given
+        doReturn(userList()).when(userRepository)
+            .findAll();
+
+        List<UserResponse> userResponses = userService.loadAll();
+
+        assertThat(userResponses.size()).isEqualTo(5);
+    }
+
     private SignUpRequest signUpRequest(){
         return new SignUpRequest("아이디1","비밀번호1");
+    }
+
+    private List<User> userList() {
+        List<User> userList = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            userList.add(new User("test@test.test", "test"));
+        }
+        return userList;
     }
 
 }
