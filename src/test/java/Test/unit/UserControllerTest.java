@@ -1,6 +1,7 @@
 package Test.unit;
 
 import com.google.gson.Gson;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,10 +14,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MockMvcBuilder;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -68,6 +74,37 @@ class UserControllerTest {
 
     private UserResponse userResponse(){
         return new UserResponse("아이디1","비밀번호1");
+    }
+
+    @Test
+    @DisplayName("사용자 목록 조회")
+    void getAllUsers_Ok() throws Exception {
+        //given
+        doReturn(userList()).when(userService)
+            .loadAll();
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+            MockMvcRequestBuilders.get("/api/v1/users")
+        );
+
+        //then
+        MvcResult mvcResult = resultActions.andExpect(status().isOk()).andReturn();
+
+        UserListResponse userListResponse = new Gson().fromJson(mvcResult.getResponse().getContentAsString(), UserListResponse.class);
+
+        assertThat(userListResponse.getUserResponses().size()).isEqualTo(5);
+    }
+
+    private List<UserResponse> userList() {
+
+        List<UserResponse> userResponses = new ArrayList<>();
+
+        for(int i = 0;i<5;i++) {
+            userResponses.add(new UserResponse("아이디" + i,"비밀번호" + i));
+        }
+
+        return userResponses;
     }
 
 }

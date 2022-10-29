@@ -25,7 +25,8 @@ public class UserController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<UserResponse>> loadAll(){
-        return ResponseEntity.ok(userService.loadAll());
+    public ResponseEntity<UserListResponse> loadAll(){
+        List<UserResponse> userResponses = userService.loadAll();
+        return ResponseEntity.ok(new UserListResponse(userResponses));
     }
 }
