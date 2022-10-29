@@ -20,6 +20,7 @@ public class UserService {
         User user = new User(signUpRequest.getName(), encode);
 
         User save = userRepository.save(user);
+
         return new UserResponse(save.getName(), save.getPassword());
     }
 

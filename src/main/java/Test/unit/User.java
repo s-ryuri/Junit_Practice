@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
-@Table
+@Table(name = "junit_User")
 public class User {
 
     @Id
