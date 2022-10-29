@@ -1,4 +1,4 @@
-package Test.unit;
+package Test.unit.lotto;
 
 import java.util.List;
 import java.util.Random;
