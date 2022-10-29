@@ -1,6 +1,6 @@
 package Test.unit;
 
-import org.junit.jupiter.api.Assertions;
+import Test.unit.lotto.LottoNumberGenerator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
