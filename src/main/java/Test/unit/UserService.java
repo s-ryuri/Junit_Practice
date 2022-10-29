@@ -1,6 +1,7 @@
 package Test.unit;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,9 +13,11 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
     @Transactional
     public UserResponse signUp(SignUpRequest signUpRequest){
-        User user = new User(signUpRequest.getName(), signUpRequest.getPassword());
+        String encode = passwordEncoder.encode(signUpRequest.getPassword());
+        User user = new User(signUpRequest.getName(), encode);
 
         User save = userRepository.save(user);
         return new UserResponse(save.getName(), save.getPassword());
